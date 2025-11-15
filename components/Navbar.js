@@ -1,11 +1,13 @@
 
 
+
+
 // components/Navbar.js
 'use client';
 
 import { useState } from 'react';
 import { useCart } from './CartContext';
-import Link from 'next/link';
+import Logo from './Logo';
 
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -14,16 +16,27 @@ export default function Navbar() {
   return (
     <nav className="bg-navy text-white sticky top-0 z-50 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link href="/" className="flex items-center">
-              <h1 className="text-2xl font-bold text-gold">GenZverse</h1>
-            </Link>
+        <div className="flex items-center justify-between h-20">
+          {/* Logo and Brand */}
+          <div className="flex items-center space-x-3">
+            <Logo size="large" showText={true} />
+          </div>
+
+          {/* Navigation Links */}
+          <div className="hidden md:flex items-center space-x-8">
+            <a href="/" className="text-white hover:text-gold transition-colors duration-200 font-medium">
+              Home
+            </a>
+            <a href="/about" className="text-white hover:text-gold transition-colors duration-200 font-medium">
+              About Us
+            </a>
+            <a href="#products" className="text-white hover:text-gold transition-colors duration-200 font-medium">
+              Collection
+            </a>
           </div>
 
           {/* Search Bar */}
-          <div className="flex-1 max-w-2xl mx-8">
+          <div className="flex-1 max-w-lg mx-8">
             <div className="relative">
               <input
                 type="text"
@@ -54,6 +67,30 @@ export default function Navbar() {
               </span>
             )}
           </button>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <button className="text-white hover:text-gold transition-colors">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        <div className="md:hidden border-t border-gray-600 pt-4 pb-2">
+          <div className="flex space-x-6">
+            <a href="/" className="text-white hover:text-gold transition-colors text-sm font-medium">
+              Home
+            </a>
+            <a href="/about" className="text-white hover:text-gold transition-colors text-sm font-medium">
+              About Us
+            </a>
+            <a href="#products" className="text-white hover:text-gold transition-colors text-sm font-medium">
+              Collection
+            </a>
+          </div>
         </div>
       </div>
     </nav>
