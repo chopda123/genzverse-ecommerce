@@ -13,21 +13,21 @@ export default function HomeClient({ products }) {
 
   const slides = [
     {
-      image: '/banner/banner-1.jpg.png', // Add your photos here
+      image: '/banner/banner-1.jpg.jpg', // Add your photos here
       title: 'Limited Edition Collection',
       subtitle: 'Exclusive designs crafted with precision in Akola',
       cta: 'Shop Now',
       overlay: 'from-black/40 to-black/20'
     },
     {
-      image: '/banner/banner-2.png',
+      image: '/banner/banner-2.jpg',
       title: 'Premium Quality Fabric',
       subtitle: 'Experience unparalleled comfort and durability',
       cta: 'Discover',
       overlay: 'from-black/50 to-black/30'
     },
     {
-      image: '/banner/banner-3.png',
+      image: '/banner/banner-3.jpg',
       title: 'Handcrafted Excellence',
       subtitle: 'Every stitch tells a story of 8 years craftsmanship',
       cta: 'Explore',
@@ -41,8 +41,8 @@ export default function HomeClient({ products }) {
       setTimeout(() => {
         setCurrentSlide((prev) => (prev + 1) % slides.length);
         setIsTransitioning(false);
-      }, 500);
-    }, 4000);
+      }, 400);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [slides.length]);
