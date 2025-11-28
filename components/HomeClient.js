@@ -1,5 +1,6 @@
 
 
+
 // components/HomeClient.js
 'use client';
 
@@ -9,172 +10,162 @@ import Link from 'next/link';
 
 export default function HomeClient({ products }) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const slides = [
     {
-      image: '/banner/banner-2.jpg', // Add your photos here
-      title: ' Premium Quality Fabric',
-      subtitle: 'Exclusive designs crafted with precision in Akola',
-      cta: 'Shop Now',
-      overlay: 'from-black/40 to-black/20'
+      image: '/banner/banner-2.jpg', 
+      title: 'SHIBUYA ARC',
+      subtitle: 'VOL. 01 / STREETWEAR COLLECTION',
+      cta: 'SHOP DROP',
     },
     {
       image: '/banner/banner-3.jpg',
-      title: 'Handcrafted Excellence',
-      subtitle: 'Experience unparalleled comfort and durability',
-      cta: 'Discover',
-      overlay: 'from-black/50 to-black/30'
-     
+      title: 'CURSED ENERGY',
+      subtitle: 'PREMIUM OVERSIZED TEES',
+      cta: 'EXPLORE',
     },
-    {
-      image: '/banner/banner-1.jpg.jpg',
-      title: 'Limited Edition Collection',
-      subtitle: 'Every stitch tells a story of 8 years craftsmanship',
-      cta: 'Explore',
-      overlay: 'from-black/40 to-black/10'
-    }
   ];
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setCurrentSlide((prev) => (prev + 1) % slides.length);
-        setIsTransitioning(false);
-      }, 400);
-    }, 3000);
-
-    return () => clearInterval(interval);
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(timer);
   }, [slides.length]);
 
-  const nextSlide = () => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-      setIsTransitioning(false);
-    }, 500);
-  };
-
-  const prevSlide = () => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-      setIsTransitioning(false);
-    }, 500);
-  };
-
-  const goToSlide = (index) => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentSlide(index);
-      setIsTransitioning(false);
-    }, 500);
-  };
-
   return (
-    <>
-      {/* Premium Sliding Banner with Photos */}
-      <section className="relative h-[70vh] min-h-[500px] overflow-hidden bg-navy">
-        {/* Slides */}
-        <div className="relative w-full h-full">
-          {slides.map((slide, index) => (
-            <div
-              key={index}
-              className={`absolute inset-0 transition-all duration-500 ease-in-out ${
-                index === currentSlide 
-                  ? 'opacity-100 scale-100' 
-                  : 'opacity-0 scale-105'
-              } ${isTransitioning ? 'transitioning' : ''}`}
-            >
-              {/* Background Image */}
-              <div 
-                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: `url('${slide.image}')` }}
-              />
-              
-              {/* Gradient Overlay */}
-              <div className={`absolute inset-0 bg-gradient-to-r ${slide.overlay} z-10`} />
-              
-              {/* Content */}
-              <div className="relative z-20 h-full flex items-center justify-center px-4">
-                <div className="text-center text-white max-w-4xl mx-auto">
-                  <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight leading-tight drop-shadow-2xl">
-                    {slide.title}
-                  </h1>
-                  <p className="text-lg md:text-xl lg:text-2xl mb-8 text-gray-200 max-w-2xl mx-auto leading-relaxed drop-shadow-lg">
-                    {slide.subtitle}
-                  </p>
-                  <Link 
-                    href="#products" 
-                    className="inline-block bg-gold text-navy px-8 py-4 rounded-lg font-bold text-lg hover:bg-gold/90 transition-all duration-300 transform hover:scale-105 shadow-2xl"
-                  >
-                    {slide.cta}
-                  </Link>
-                </div>
+    <main className="flex-1 bg-black">
+      {/* Cinematic Hero Section */}
+      <section className="relative h-[85vh] w-full overflow-hidden">
+        {slides.map((slide, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ${
+              index === currentSlide ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            {/* Image with Dark Overlay */}
+            <div className="absolute inset-0 bg-black/40 z-10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10" />
+            <img
+              src={slide.image}
+              alt={slide.title}
+              className="w-full h-full object-cover object-center"
+            />
+            
+            {/* Content */}
+            <div className="absolute inset-0 z-20 flex flex-col justify-end pb-20 px-6 md:px-12 max-w-7xl mx-auto">
+              <div className={`transition-all duration-700 delay-300 transform ${
+                index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+              }`}>
+                <p className="text-red-500 font-bold tracking-[0.2em] mb-4 text-sm md:text-base">
+                  {slide.subtitle}
+                </p>
+                <h1 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter leading-[0.9] mb-8 italic">
+                  {slide.title}
+                </h1>
+                <Link
+                  href="/products"
+                  className="inline-block bg-white text-black hover:bg-red-600 hover:text-white px-8 py-4 text-sm font-bold uppercase tracking-widest transition-all duration-300"
+                >
+                  {slide.cta}
+                </Link>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
         
         {/* Slide Indicators */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30 flex space-x-3">
-          {slides.map((_, index) => (
+        <div className="absolute bottom-8 right-8 z-30 flex space-x-2">
+          {slides.map((_, idx) => (
             <button
-              key={index}
-              onClick={() => goToSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === currentSlide 
-                  ? 'bg-gold scale-125 shadow-lg' 
-                  : 'bg-white/50 hover:bg-white/70'
+              key={idx}
+              onClick={() => setCurrentSlide(idx)}
+              className={`h-1 transition-all duration-300 ${
+                idx === currentSlide ? 'w-8 bg-red-600' : 'w-4 bg-white/50 hover:bg-white'
               }`}
             />
           ))}
         </div>
-
-        {/* Navigation Arrows */}
-        <button
-          onClick={prevSlide}
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 z-30 bg-black/30 hover:bg-black/50 text-white/90 hover:text-white transition-all duration-300 rounded-full p-3 backdrop-blur-sm border border-white/20"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        
-        <button
-          onClick={nextSlide}
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 z-30 bg-black/30 hover:bg-black/50 text-white/90 hover:text-white transition-all duration-300 rounded-full p-3 backdrop-blur-sm border border-white/20"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-
-        {/* Subtle Pattern Overlay */}
-        <div className="absolute inset-0 z-15 opacity-5 bg-gradient-to-r from-transparent via-white to-transparent"></div>
       </section>
 
-      {/* Products Grid */}
-      <main id="products" className="flex-1 py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4 tracking-tight">
-              Featured Collection
-            </h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto leading-relaxed">
-              Curated selection of premium essentials designed for modern living. 
-              Each piece tells a story of craftsmanship and quality.
-            </p>
-          </div>
+      {/* Marquee Separator */}
+      <div className="bg-red-600 text-white overflow-hidden py-3">
+        <div className="whitespace-nowrap animate-marquee flex space-x-8">
+          {[...Array(10)].map((_, i) => (
+            <span key={i} className="text-sm font-bold uppercase tracking-widest mx-4">
+              NEW SEASON DROP • FREE SHIPPING ON ORDERS ABOVE ₹999 • LIMITED EDITION
+            </span>
+          ))}
+        </div>
+      </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 lg:gap-10">
-            {products.map(product => (
-              <ProductCard key={product.slug} product={product} />
-            ))}
+      {/* Categories / Featured */}
+      <section className="py-20 px-4 md:px-8 max-w-7xl mx-auto">
+        <div className="flex items-end justify-between mb-12 border-b border-white/10 pb-4">
+          <div>
+            <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight italic">
+              Latest Drops
+            </h2>
+          </div>
+          <Link href="/products" className="hidden md:block text-sm font-bold text-gray-400 hover:text-red-500 uppercase tracking-widest">
+            View All →
+          </Link>
+        </div>
+
+        {/* 2-Column Grid on Mobile, 4-Column on Desktop */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10">
+          {products.map((product) => (
+            <ProductCard key={product.slug} product={product} />
+          ))}
+        </div>
+        
+        <div className="mt-12 text-center md:hidden">
+           <Link href="/products" className="inline-block border border-white/20 text-white px-8 py-3 text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors">
+            View All Products
+          </Link>
+        </div>
+      </section>
+
+      {/* TRUST & GENESIS SECTION (ADDED) */}
+      <section className="border-t border-white/10 bg-zinc-950">
+        
+        {/* The Genesis Brief */}
+        <div className="py-20 px-4 text-center border-b border-white/10">
+          <p className="text-red-600 font-bold tracking-[0.3em] uppercase text-sm mb-6 animate-pulse">
+            Est. 2016 // Akola, India
+          </p>
+          <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter italic leading-tight mb-6">
+            The <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500">Genesis</span>
+          </h2>
+          <p className="text-gray-400 font-medium tracking-wide uppercase max-w-xl mx-auto leading-relaxed text-sm md:text-base">
+            We didn't start in a boardroom. We started with a obsession for anime culture and a refusal to wear boring clothes.
+          </p>
+          <div className="mt-8">
+            <Link href="/about" className="text-sm font-bold text-white underline decoration-red-600 underline-offset-4 hover:text-red-500 uppercase tracking-widest">
+              Read our full story
+            </Link>
           </div>
         </div>
-      </main>
-    </>
+
+        {/* Stats Numbers */}
+        <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10 border-white/10">
+          {[
+            { label: 'Years Active', value: '08' },
+            { label: 'Drops Released', value: '50+' },
+            { label: 'Community', value: '10K' },
+            { label: 'Craftsmanship', value: '100%' },
+          ].map((stat, i) => (
+            <div key={i} className="p-8 text-center group hover:bg-zinc-900 transition-colors duration-300">
+              <div className="text-3xl md:text-5xl font-black text-white italic mb-2 group-hover:text-red-600 transition-colors">
+                {stat.value}
+              </div>
+              <p className="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-[0.2em]">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+    </main>
   );
 }

@@ -1,17 +1,133 @@
 
 
+
+// // components/ProductClient.js
+// 'use client';
+
+// import { useState } from 'react';
+// import { useCart } from './CartContext';
+// import Link from 'next/link';
+
+// export default function ProductClient({ product }) {
+//   const [selectedSize, setSelectedSize] = useState('');
+//   const [currentImage, setCurrentImage] = useState(0);
+//   const { addToCart } = useCart();
+
+//   const formattedPrice = new Intl.NumberFormat('en-IN', {
+//     style: 'currency',
+//     currency: 'INR',
+//     maximumFractionDigits: 0,
+//   }).format(product.price);
+
+//   return (
+//     <main className="flex-1 bg-black pt-24 pb-16">
+//       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+//         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+          
+//           <div className="space-y-4">
+//             <div className="aspect-[4/5] w-full bg-zinc-900 overflow-hidden relative group">
+//               <img 
+//                 src={product.images[currentImage]} 
+//                 alt={product.name} 
+//                 className="w-full h-full object-cover"
+//               />
+//               {product.badge && (
+//                 <span className="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold px-3 py-1 uppercase tracking-widest">
+//                   {product.badge}
+//                 </span>
+//               )}
+//             </div>
+//             <div className="grid grid-cols-4 gap-4">
+//               {product.images.map((img, idx) => (
+//                 <button
+//                   key={idx}
+//                   onClick={() => setCurrentImage(idx)}
+//                   className={`aspect-square overflow-hidden border-2 transition-colors ${
+//                     currentImage === idx ? 'border-red-600' : 'border-transparent hover:border-white/50'
+//                   }`}
+//                 >
+//                   <img src={img} alt="" className="w-full h-full object-cover" />
+//                 </button>
+//               ))}
+//             </div>
+//           </div>
+
+//           <div className="flex flex-col justify-center">
+//             <h1 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight italic mb-2">
+//               {product.name}
+//             </h1>
+            
+//             <div className="flex items-center gap-4 mb-8">
+//               <span className="text-2xl font-bold text-red-500">{formattedPrice}</span>
+//               <span className="text-sm text-gray-500 uppercase tracking-widest">Tax included</span>
+//             </div>
+
+//             <p className="text-gray-400 leading-relaxed mb-8 border-l-2 border-red-600 pl-4">
+//               {product.description}
+//             </p>
+
+//             <div className="mb-8">
+//               <div className="flex justify-between items-center mb-4">
+//                 <span className="text-sm font-bold text-white uppercase tracking-widest">Select Size</span>
+//                 <button className="text-xs text-gray-400 underline hover:text-white">Size Guide</button>
+//               </div>
+//               <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+//                 {['S', 'M', 'L', 'XL', 'XXL'].map((size) => (
+//                   <button
+//                     key={size}
+//                     onClick={() => setSelectedSize(size)}
+//                     className={`py-3 text-sm font-bold border transition-all ${
+//                       selectedSize === size
+//                         ? 'bg-white text-black border-white'
+//                         : 'bg-transparent text-gray-400 border-zinc-800 hover:border-white hover:text-white'
+//                     }`}
+//                   >
+//                     {size}
+//                   </button>
+//                 ))}
+//               </div>
+//             </div>
+
+//             <div className="space-y-4">
+//               <button
+//                 onClick={() => {
+//                   if (!selectedSize) {
+//                     alert('PLEASE SELECT A SIZE');
+//                     return;
+//                   }
+//                   addToCart(product, selectedSize, 1);
+//                 }}
+//                 className="w-full bg-white text-black py-4 font-black uppercase tracking-widest hover:bg-gray-200 transition-colors"
+//               >
+//                 Add to Cart
+//               </button>
+              
+//               <Link
+//                 href="/checkout"
+//                 className="block w-full text-center bg-red-600 text-white py-4 font-black uppercase tracking-widest hover:bg-red-700 transition-colors"
+//               >
+//                 Buy Now
+//               </Link>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </main>
+//   );
+// }
+
 // components/ProductClient.js
 'use client';
 
 import { useState } from 'react';
-import Gallery from './Gallery';
 import { useCart } from './CartContext';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function ProductClient({ product }) {
   const [selectedSize, setSelectedSize] = useState('');
-  const [quantity, setQuantity] = useState(1);
+  const [currentImage, setCurrentImage] = useState(0);
   const { addToCart } = useCart();
+  const router = useRouter();
 
   const formattedPrice = new Intl.NumberFormat('en-IN', {
     style: 'currency',
@@ -19,126 +135,112 @@ export default function ProductClient({ product }) {
     maximumFractionDigits: 0,
   }).format(product.price);
 
-  const handleAddToCart = () => {
+  const handleBuyNow = () => {
     if (!selectedSize) {
-      alert('Please select a size');
+      alert('PLEASE SELECT A SIZE');
       return;
     }
-    addToCart(product, selectedSize, quantity);
+
+    addToCart(product, selectedSize, 1);
+    router.push('/checkout');
   };
 
   return (
-    <>
-      <main className="flex-1 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Product Gallery */}
-            <div>
-              <Gallery images={product.images} />
-            </div>
+    <main className="flex-1 bg-black pt-24 pb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
 
-            {/* Product Info */}
-            <div className="lg:pl-8">
+          <div className="space-y-4">
+            <div className="aspect-[4/5] w-full bg-zinc-900 overflow-hidden relative group">
+              <img
+                src={product.images[currentImage]}
+                alt={product.name}
+                className="w-full h-full object-cover"
+              />
               {product.badge && (
-                <span className="inline-block bg-gold text-navy px-3 py-1 rounded-full text-sm font-medium mb-4">
+                <span className="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold px-3 py-1 uppercase tracking-widest">
                   {product.badge}
                 </span>
               )}
-              
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                {product.name}
-              </h1>
-              
-              <p className="text-2xl font-bold text-navy mb-6">
-                {formattedPrice}
-              </p>
-              
-              <p className="text-gray-600 mb-8 leading-relaxed">
-                {product.description}
-              </p>
+            </div>
 
-              {/* Size Selector */}
-              <div className="mb-8">
-                <h3 className="text-sm font-medium text-gray-900 mb-4">Size</h3>
-                <div className="flex gap-3">
-                  {product.sizes.map(size => (
-                    <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      className={`px-6 py-3 border-2 rounded-lg font-medium transition-all duration-200 ${
-                        selectedSize === size
-                          ? 'border-navy bg-navy text-white'
-                          : 'border-gray-300 text-gray-700 hover:border-gray-400'
-                      }`}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Quantity Selector */}
-              <div className="mb-8">
-                <h3 className="text-sm font-medium text-gray-900 mb-4">Quantity</h3>
-                <div className="flex items-center gap-4">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
-                  >
-                    -
-                  </button>
-                  <span className="text-lg font-medium w-8 text-center">{quantity}</span>
-                  <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex gap-4">
+            <div className="grid grid-cols-4 gap-4">
+              {product.images.map((img, idx) => (
                 <button
-                  onClick={handleAddToCart}
-                  className="flex-1 bg-white border-2 border-navy text-navy px-8 py-4 rounded-lg font-medium hover:bg-navy hover:text-white transition-colors duration-200"
+                  key={idx}
+                  onClick={() => setCurrentImage(idx)}
+                  className={`aspect-square overflow-hidden border-2 transition-colors ${
+                    currentImage === idx ? 'border-red-600' : 'border-transparent hover:border-white/50'
+                  }`}
                 >
-                  Add to Cart
+                  <img src={img} alt="" className="w-full h-full object-cover" />
                 </button>
-                <Link 
-                  href="/checkout"
-                  onClick={() => {
-                    if (!selectedSize) {
-                      alert('Please select a size');
-                      return;
-                    }
-                    addToCart(product, selectedSize, quantity);
-                  }}
-                  className="flex-1 btn-primary text-center py-4 block"
-                >
-                  Buy Now
-                </Link>
-              </div>
-
-              {/* Shipping Info */}
-              <div className="mt-8 p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center text-sm text-gray-600">
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Free shipping on all orders
-                </div>
-                <div className="flex items-center text-sm text-gray-600 mt-2">
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Delivery within 3-5 business days
-                </div>
-              </div>
+              ))}
             </div>
           </div>
+
+          <div className="flex flex-col justify-center">
+            <h1 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight italic mb-2">
+              {product.name}
+            </h1>
+
+            <div className="flex items-center gap-4 mb-8">
+              <span className="text-2xl font-bold text-red-500">{formattedPrice}</span>
+              <span className="text-sm text-gray-500 uppercase tracking-widest">Tax included</span>
+            </div>
+
+            <p className="text-gray-400 leading-relaxed mb-8 border-l-2 border-red-600 pl-4">
+              {product.description}
+            </p>
+
+            <div className="mb-8">
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-sm font-bold text-white uppercase tracking-widest">Select Size</span>
+                <button className="text-xs text-gray-400 underline hover:text-white">Size Guide</button>
+              </div>
+
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+                {['S', 'M', 'L', 'XL', 'XXL'].map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`py-3 text-sm font-bold border transition-all ${
+                      selectedSize === size
+                        ? 'bg-white text-black border-white'
+                        : 'bg-transparent text-gray-400 border-zinc-800 hover:border-white hover:text-white'
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <button
+                onClick={() => {
+                  if (!selectedSize) {
+                    alert('PLEASE SELECT A SIZE');
+                    return;
+                  }
+                  addToCart(product, selectedSize, 1);
+                }}
+                className="w-full bg-white text-black py-4 font-black uppercase tracking-widest hover:bg-gray-200 transition-colors"
+              >
+                Add to Cart
+              </button>
+
+              <button
+                onClick={handleBuyNow}
+                className="w-full bg-red-600 text-white py-4 font-black uppercase tracking-widest hover:bg-red-700 transition-colors"
+              >
+                Buy Now
+              </button>
+            </div>
+
+          </div>
         </div>
-      </main>
-    </>
+      </div>
+    </main>
   );
 }

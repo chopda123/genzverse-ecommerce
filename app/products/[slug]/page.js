@@ -1,11 +1,25 @@
+
+
+
 // app/products/[slug]/page.js
-import { getProductBySlug, getAllProducts } from '../../../data/products';
+import { getAllProducts, getProductBySlug } from '../../../data/products';
 import Navbar from '../../../components/Navbar';
 import Footer from '../../../components/Footer';
-import CartDrawer from '../../../components/CartDrawer';
 import ProductClient from '../../../components/ProductClient';
+import CartDrawer from '../../../components/CartDrawer';
+import { notFound } from 'next/navigation';
 
-// Generate static params for all products
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const product = getProductBySlug(slug);
+  if (!product) return { title: 'Not Found' };
+  
+  return {
+    title: `${product.name.toUpperCase()} | GENZVERSE`,
+    description: product.description,
+  };
+}
+
 export async function generateStaticParams() {
   const products = getAllProducts();
   return products.map((product) => ({
@@ -13,47 +27,16 @@ export async function generateStaticParams() {
   }));
 }
 
-// Generate metadata for each product page
-export async function generateMetadata({ params }) {
-  // Ensure we await the params if needed
-  const slug = (await params).slug;
-  const product = getProductBySlug(slug);
-  
-  if (!product) {
-    return {
-      title: 'Product Not Found',
-    };
-  }
-
-  return {
-    title: `${product.name} | Elevate Store`,
-    description: product.description,
-    openGraph: {
-      title: product.name,
-      description: product.description,
-      images: [product.images[0]],
-    },
-  };
-}
-
 export default async function ProductPage({ params }) {
-  // Ensure we await the params
-  const slug = (await params).slug;
+  const { slug } = await params;
   const product = getProductBySlug(slug);
 
   if (!product) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Product Not Found</h1>
-          <p className="text-gray-600 mt-2">The product you're looking for doesn't exist.</p>
-        </div>
-      </div>
-    );
+    notFound();
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-black text-white selection:bg-red-600 selection:text-white">
       <Navbar />
       <ProductClient product={product} />
       <Footer />
